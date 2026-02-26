@@ -82,14 +82,56 @@ body {
   padding: 1.5rem;
 }
 
-.content-header h1 {
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.topbar h1 {
   margin: 0;
   font-size: 1.6rem;
 }
 
-.content-header p {
+.topbar p {
   margin: 0.5rem 0 0;
   color: #475569;
+}
+
+.book-switcher {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 250px;
+  background: #fff;
+  border: 1px solid #dbe3f0;
+  border-radius: 10px;
+  padding: 0.6rem;
+}
+
+.book-switcher label {
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+select,
+button {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.9rem;
+  background: #fff;
+}
+
+button {
+  cursor: pointer;
+  background: #1d4ed8;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+button:hover {
+  background: #1e40af;
 }
 
 .panel-grid {
@@ -155,6 +197,33 @@ td {
   font-size: 0.9rem;
 }
 
+.row-active {
+  background: #eef4ff;
+}
+
+.personal-settings {
+  grid-column: 1 / -1;
+}
+
+.settings-row {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.settings-row label {
+  min-width: 72px;
+  color: #334155;
+}
+
+.tip {
+  margin-top: 0.75rem;
+  color: #1e3a8a;
+  font-weight: 600;
+}
+
 @media (max-width: 900px) {
   .shell {
     grid-template-columns: 1fr;
@@ -163,5 +232,13 @@ td {
   .sidebar {
     border-right: 0;
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  }
+
+  .topbar {
+    flex-direction: column;
+  }
+
+  .book-switcher {
+    width: 100%;
   }
 }

@@ -99,7 +99,41 @@ app.MapPost("/api/finance/account-books/{bookId:guid}/ledger-accounts", async (G
     });
 });
 
+var userDefaults = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+app.MapGet("/api/users/{userId}/personal-settings", async (string userId, FoErpDbContext dbContext, CancellationToken cancellationToken) =>
+{
+    var activeBooks = await dbContext.AccountBooks
+        .Where(x => x.IsActive)
+        .OrderBy(x => x.BookCode)
+        .Select(x => x.BookCode)
+        .ToListAsync(cancellationToken);
+
+    var defaultBookCode = userDefaults.TryGetValue(userId, out var userBookCode)
+        ? userBookCode
+        : activeBooks.FirstOrDefault();
+
+    return Results.Ok(new UserPersonalSettingsResponse(userId, defaultBookCode, activeBooks));
+});
+
+app.MapPut("/api/users/{userId}/personal-settings/default-account-book", async (string userId, UpdateDefaultAccountBookRequest request, FoErpDbContext dbContext, CancellationToken cancellationToken) =>
+{
+    var hasBook = await dbContext.AccountBooks
+        .AnyAsync(x => x.BookCode == request.DefaultAccountBookCode && x.IsActive, cancellationToken);
+
+    if (!hasBook)
+    {
+        return Results.BadRequest(new { message = "默认账套必须是已启用账套" });
+    }
+
+    userDefaults[userId] = request.DefaultAccountBookCode;
+
+    return Results.Ok(new UserPersonalSettingsResponse(userId, request.DefaultAccountBookCode, new[] { request.DefaultAccountBookCode }));
+});
+
 app.Run();
 
 public sealed record CreateAccountBookRequest(string BookCode, string BookName, string BaseCurrency);
 public sealed record CreateLedgerAccountRequest(string AccountNumber, string Name);
+public sealed record UpdateDefaultAccountBookRequest(string DefaultAccountBookCode);
+public sealed record UserPersonalSettingsResponse(string UserId, string? DefaultAccountBookCode, IEnumerable<string> AvailableAccountBookCodes);
