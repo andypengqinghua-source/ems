@@ -45,6 +45,26 @@ cd ems
 - .NET 8 SDK
 - Docker（用于本地 SQL Server 2022）
 
+
+## 多账套能力（对齐 F&O 多公司/多账簿管理场景）
+
+当前版本新增财务多账套基础能力：
+
+- 账套主数据（`AccountBook`）：账套编码、账套名称、本位币、启停状态
+- 科目按账套隔离：同一科目编码可在不同账套重复，但在同一账套内唯一
+- 最小 API：
+  - `GET /api/finance/account-books`：查询账套
+  - `POST /api/finance/account-books`：创建账套
+  - `POST /api/finance/account-books/{bookId}/ledger-accounts`：在账套下创建会计科目
+
+示例：创建账套
+
+```bash
+curl -X POST http://localhost:5000/api/finance/account-books \
+  -H "Content-Type: application/json" \
+  -d '{"bookCode":"CN-BOOK","bookName":"中国账套","baseCurrency":"CNY"}'
+```
+
 ## 业务域（与 F&O 对齐的能力分区）
 
 - 财务管理（总账、应收、应付、固定资产、现金银行）

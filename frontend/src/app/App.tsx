@@ -7,6 +7,12 @@ const modules = [
   { key: 'project', name: '项目管理', capability: '项目预算 / 工时 / 成本控制' }
 ];
 
+const accountBooks = [
+  { code: 'CN-BOOK', name: '中国账套', currency: 'CNY', status: '启用' },
+  { code: 'US-BOOK', name: '美国账套', currency: 'USD', status: '启用' },
+  { code: 'EU-BOOK', name: '欧洲账套', currency: 'EUR', status: '停用' }
+];
+
 export function App() {
   const activeModule = modules[0];
 
@@ -36,7 +42,34 @@ export function App() {
         </header>
 
         <section className="panel-grid">
-          {modules.map((module) => (
+          <article className="panel-card account-books">
+            <div className="row-title">
+              <h2>多账套管理</h2>
+              <span className="badge">F&O 风格</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>账套编码</th>
+                  <th>账套名称</th>
+                  <th>本位币</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                {accountBooks.map((book) => (
+                  <tr key={book.code}>
+                    <td>{book.code}</td>
+                    <td>{book.name}</td>
+                    <td>{book.currency}</td>
+                    <td>{book.status}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </article>
+
+          {modules.slice(1).map((module) => (
             <article key={module.key} className="panel-card">
               <h2>{module.name}</h2>
               <p>{module.capability}</p>

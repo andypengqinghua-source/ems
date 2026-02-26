@@ -1,6 +1,7 @@
 # foERP 业务域地图
 
 ## 1. Finance（财务）
+- Multi Book / Multi Company（多账套 / 多公司）
 - Ledger（总账）
 - Accounts Receivable（应收）
 - Accounts Payable（应付）
